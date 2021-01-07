@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 import { View, TouchableHighlight, FlatList } from 'react-native';
 import Collapsible from './Collapsible';
 import { ViewPropTypes } from './config';
@@ -32,11 +32,16 @@ export default class Accordion extends Component {
     numColumns: PropTypes.number,
     sectionContainerStyle: ViewPropTypes.style,
     containerStyle: ViewPropTypes.style,
+    contentContainerStyle: ViewPropTypes.style,
     renderAsFlatList: PropTypes.bool,
     onEndReached: PropTypes.func,
     onEndReachedThreshold: PropTypes.number,
     ListEmptyComponent: PropTypes.element,
     scrollEnabled: PropTypes.bool,
+    showsVerticalScrollIndicator: PropTypes.bool,
+    scrollEventThrottle: PropTypes.number,
+    onScroll: PropTypes.func,
+    onScrollBeginDrag: PropTypes.func,
   };
 
   static defaultProps = {
@@ -55,6 +60,10 @@ export default class Accordion extends Component {
     onEndReachedThreshold: 0.5,
     ListEmptyComponent: <></>,
     scrollEnabled: true,
+    showsVerticalScrollIndicator: true,
+    scrollEventThrottle: 16,
+    onScroll: () => null,
+    onScrollBeginDrag: () => null,
   };
 
   _toggleSection(section) {
@@ -102,7 +111,7 @@ export default class Accordion extends Component {
           {renderHeader(section, key, activeSections.includes(key), sections)}
         </Touchable>
 
-        {!expandFromBottom && renderCollapsible(section, key)}
+        {!expandFromBottom && activeSections.includes(key) && renderCollapsible(section, key)}
 
         {renderFooter &&
           renderFooter(section, key, activeSections.includes(key), sections)}
@@ -125,6 +134,7 @@ export default class Accordion extends Component {
     const {
       activeSections,
       containerStyle,
+      contentContainerStyle,
       sections,
       onAnimationEnd,
       keyExtractor,
@@ -134,6 +144,10 @@ export default class Accordion extends Component {
       onEndReachedThreshold,
       ListEmptyComponent,
       scrollEnabled,
+      onScrollBeginDrag,
+      scrollEventThrottle,
+      onScroll,
+      showsVerticalScrollIndicator,
     } = this.props;
 
     const renderCollapsible = (section, key) => (
@@ -150,13 +164,17 @@ export default class Accordion extends Component {
       return (
         <FlatList
           style={containerStyle}
+          contentContainerStyle={contentContainerStyle}
           data={sections}
           extraData={activeSections}
-          nestedScrollEnabled={true}
           keyExtractor={keyExtractor}
           ListEmptyComponent={ListEmptyComponent}
+          nestedScrollEnabled={true}
           onEndReached={onEndReached}
           onEndReachedThreshold={onEndReachedThreshold}
+          onScrollBeginDrag={onScrollBeginDrag}
+          onScroll={onScroll}
+          showsVerticalScrollIndicator={showsVerticalScrollIndicator}
           scrollEnabled={scrollEnabled}
           renderItem={({ item, index }) => {
             const section = item;

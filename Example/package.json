@@ -13,7 +13,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-animatable": "^1.3.3",
-    "react-native-collapsible": "^1.5.1",
+    "react-native-collapsible": "git+https://git@github.com/Neovirxp/react-native-collapsible.git",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
