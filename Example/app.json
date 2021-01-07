@@ -4,7 +4,6 @@
     "description": "React Native Collapsible example app",
     "slug": "Example",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",
